@@ -1,19 +1,18 @@
 import java.util.*;
 
-public class second {
+public class Main {
 
-    public static boolean isPrime(int n) {
-        if (n <= 1) return false;
-        for (int i = 2; i <= Math.sqrt(n); i++) {
-            if (n % i == 0) return false;
-        }
-        return true;
+    public static void main(String[] args) {
+        int[] arr1 = {5, 1, 8, 11, 2};
+        int[] arr2 = {1, 6, 4, 13, 9, 3};
+
+        System.out.println("Output 1: " + formatArray(arr1));
+        System.out.println("Output 2: " + formatArray(arr2));
     }
 
-    public static int[] sortArray(int[] arr) {
+    public static List<Integer> formatArray(int[] arr) {
         List<Integer> primes = new ArrayList<>();
         List<Integer> nonPrimes = new ArrayList<>();
-
         for (int num : arr) {
             if (isPrime(num)) {
                 primes.add(num);
@@ -22,29 +21,34 @@ public class second {
             }
         }
 
-        Collections.sort(primes, Collections.reverseOrder());
-        Collections.sort(nonPrimes, Collections.reverseOrder());
+        if (primes.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        int largestPrime = Collections.max(primes);
+        int smallestPrime = Collections.min(primes);
+
+        primes.remove(Integer.valueOf(largestPrime));
+        primes.remove(Integer.valueOf(smallestPrime));
+
+        nonPrimes.addAll(primes);
+
+        nonPrimes.sort(Collections.reverseOrder());
 
         List<Integer> result = new ArrayList<>();
-        if (!primes.isEmpty()) {
-            result.add(primes.get(0)); // Largest prime
-        }
-        result.addAll(nonPrimes); // Add non-prime numbers
-        if (primes.size() > 1) {
-            result.add(primes.get(primes.size() - 1)); // Smallest prime
-        }
+        result.add(largestPrime);
+        result.addAll(nonPrimes);
+        result.add(smallestPrime);
 
-        // Convert list back to array
-        return result.stream().mapToInt(i -> i).toArray();
+        return result;
     }
 
-    public static void main(String[] args) {
-        Scanner sc= new Scanner(System.in);
-        int a=sc.nextInt();
-        int arr[]=new int[a];
-        for(int i=0;i<a;i++){
-            arr[i]=sc.nextInt();
+    public static boolean isPrime(int num) {
+        if (num <= 1) return false;
+        if (num == 2) return true;
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) return false;
         }
-        System.out.println(Arrays.toString(sortArray(arr))); 
+        return true;
     }
 }
